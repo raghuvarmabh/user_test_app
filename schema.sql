@@ -1,0 +1,7 @@
+CREATE SCHEMA IF NOT EXISTS demo;
+
+CREATE TABLE IF NOT EXISTS demo.users (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INT NOT NULL
+);
