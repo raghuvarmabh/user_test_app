@@ -1,5 +1,10 @@
-CREATE TABLE IF NOT EXISTS public.users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     age INT NOT NULL
+);
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    teacher TEXT NOT NULL
 );
