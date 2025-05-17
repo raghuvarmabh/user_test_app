@@ -4,17 +4,13 @@ import os
 
 app = Flask(__name__)
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_NAME = os.getenv("DB_NAME", "your_db_name")
-DB_USER = os.getenv("DB_USER", "your_db_user")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "your_db_password")
 
 def get_db_connection():
     return psycopg2.connect(
-        host=DB_HOST,
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD
+        host='127.0.0.1',
+        dbname='replace me',
+        user='replace me',
+        password='replace me'
     )
 
 @app.route('/')
@@ -25,7 +21,7 @@ def home():
 def view_users():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, name, age FROM demo.users ORDER BY id")
+    cur.execute("SELECT id, name, age FROM public.users ORDER BY id")
     users = cur.fetchall()
     cur.close()
     conn.close()
@@ -38,7 +34,7 @@ def add_user():
         age = int(request.form['age'])
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO demo.users (name, age) VALUES (%s, %s)", (name, age))
+        cur.execute("INSERT INTO users (name, age) VALUES (%s, %s)", (name, age))
         conn.commit()
         cur.close()
         conn.close()
@@ -52,13 +48,13 @@ def update_user(user_id):
     if request.method == 'POST':
         name = request.form['name']
         age = int(request.form['age'])
-        cur.execute("UPDATE demo.users SET name=%s, age=%s WHERE id=%s", (name, age, user_id))
+        cur.execute("UPDATE users SET name=%s, age=%s WHERE id=%s", (name, age, user_id))
         conn.commit()
         cur.close()
         conn.close()
         return redirect(url_for('view_users'))
 
-    cur.execute("SELECT name, age FROM demo.users WHERE id=%s", (user_id,))
+    cur.execute("SELECT name, age FROM users WHERE id=%s", (user_id,))
     user = cur.fetchone()
     cur.close()
     conn.close()
@@ -68,7 +64,7 @@ def update_user(user_id):
 def delete_user(user_id):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM demo.users WHERE id=%s", (user_id,))
+    cur.execute("DELETE FROM users WHERE id=%s", (user_id,))
     conn.commit()
     cur.close()
     conn.close()
